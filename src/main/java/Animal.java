@@ -1,4 +1,6 @@
+import models.DB;
 import org.sql2o.Connection;
+import org.sql2o.Sql2o;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,11 +12,20 @@ public class Animal {
     private String healthy;
     private int id;
 
-    public Animal(String name, String age, String endangered, String healthy) {
+//    public class Animal implements Animal{
+    private final Sql2o sql2o;
+    public Animal(Sql2o sql2o){
+
+        this.sql2o = sql2o;
+    }
+
+
+    public Animal(String name, String age, String endangered, String healthy, Sql2o sql2o) {
         this.name = name;
         this.age = age;
         this.endangered = endangered;
         this.healthy = healthy;
+        this.sql2o = sql2o;
     }
 
     public String getName() {
@@ -64,7 +75,7 @@ public class Animal {
 
     public static List<Animal> all() {
         String sql = "SELECT * FROM animals";
-        try(Connection con = DB.sql2o.open()) {
+        try(Connection con = models.DB.sql2o.open()) {
             return con.createQuery(sql).executeAndFetch(Animal.class);
         }
     }

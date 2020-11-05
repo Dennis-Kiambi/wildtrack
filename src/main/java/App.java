@@ -1,10 +1,14 @@
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static models.DB.sql2o;
 import static spark.Spark.*;
 
 public class App {
@@ -46,7 +50,7 @@ public class App {
             String location = req.queryParams("location");
             String ranger = req.queryParams("ranger");
 
-            Animal newAnimal = new Animal(name, age,endangered,healthy);
+            Animal newAnimal = new Animal(name, age,endangered,healthy, sql2o);
             Sighting newSighting = new Sighting(location,ranger);
             newAnimal.save();
             newSighting.save();
